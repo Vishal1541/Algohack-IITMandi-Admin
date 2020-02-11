@@ -32,8 +32,8 @@ app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
 
-app.use('/auth', authRoute);
-app.use('/dashboard', dashboardRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/dashboard', dashboardRoute);
 
 // Handle production
 if (process.env.NODE_ENV === 'production') {
