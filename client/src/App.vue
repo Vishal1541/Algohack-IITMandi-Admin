@@ -2,14 +2,14 @@
   <div id="app">
     <div class="content">
       <center>
-        <h1>CodeAll - IIT Mandi</h1>
+        <h1>CodeHack - IIT Mandi</h1>
       </center>
       <hr />
       <b-container>
         <!-- <router-link :to="{ name: 'Dashboard'}">Dashboard</router-link>
         <Login />-->
         <!-- <Footer /> -->
-        <router-view :loggedin="id" />
+        <router-view />
       </b-container>
     </div>
     <footer class="footer">
@@ -52,7 +52,7 @@ export default {
 <style>
 html,
 body {
-  height: 98%;
+  height: 96%;
 }
 #app {
   display: flex;

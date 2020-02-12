@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header />
     <div class="login-container" v-if="!loading">
+      <Header />
       <b-col sm="4" offset="4">
         <b-form class="login-form">
           <center>

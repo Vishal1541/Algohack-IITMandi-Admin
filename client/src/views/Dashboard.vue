@@ -1,14 +1,24 @@
 <template>
   <div>
-    <Header />
     <div v-if="!loading">
-      <h2>Dashboard</h2>
+      <Header />
       <div v-if="got_details">
-        <p>User: {{ user.name }}</p>
+        <p>Admin: {{ user.name }}</p>
       </div>
       <div v-else>Loading...</div>
+      <b-col sm="6" offset="3">
+        <div>
+          <center>
+            <h3>My problems</h3>
+          </center>
+          <b-table :items="items" :fields="fields">
+            <template v-slot:cell(first_name)="data">
+              <router-link :to="`/dashboard/edit/${data.value}`">{{data.value}}</router-link>
+            </template>
+          </b-table>
+        </div>
+      </b-col>
     </div>
-    <div v-else></div>
   </div>
 </template>
 
@@ -27,7 +37,13 @@ export default {
       got_details: false,
       user: {
         name: ''
-      }
+      },
+      fields: ['first_name', 'last_name', 'age'],
+      items: [
+        { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+        { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
+        { age: 89, first_name: 'Geneva', last_name: 'Wilson' }
+      ]
     }
   },
   components: {

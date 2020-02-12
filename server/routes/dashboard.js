@@ -7,4 +7,8 @@ router.get('/', dashboard.homePage);
 
 router.get('/user', authMiddleware, dashboard.getUser);
 
+router.get('/qIDexists/:qID', dashboard.isProblemCodeAvailable);
+
+router.post('/create-problem', dashboard.createProblem);
+
 module.exports = router;
