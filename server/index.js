@@ -13,7 +13,7 @@ const dashboardRoute = require('./routes/dashboard');
 const authMiddleware = require('./middleware/auth_middleware');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(configDb.database, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(configDb.database, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 var db = mongoose.connection;
 
 db.once('open', () => {
@@ -92,9 +92,9 @@ app.use('/api/auth', authRoute);
 app.use('/api/dashboard', authMiddleware, dashboardRoute);
 app.get('/api/local', (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return res.send({_id: null});
+    return res.send({ _id: null });
   } else {
-    return res.send({_id: req.session.passport.user});
+    return res.send({ _id: req.session.passport.user });
   }
 })
 

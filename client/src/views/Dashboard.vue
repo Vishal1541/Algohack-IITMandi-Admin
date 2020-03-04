@@ -9,11 +9,15 @@
       <b-col sm="6" offset="3">
         <div>
           <center>
-            <h3>My problems</h3>
+            <h3 v-if="!table_loading">My problems</h3>
+            <h3 v-if="table_loading">Table loading...</h3>
           </center>
-          <b-table :items="items" :fields="fields">
-            <template v-slot:cell(first_name)="data">
-              <router-link :to="`/dashboard/edit/${data.value}`">{{data.value}}</router-link>
+          <b-table :items="all_problems" :fields="fields">
+            <template v-slot:cell(qID)="data">
+              <router-link :to="`/dashboard/test/${data.value}`">{{data.value}}</router-link>
+            </template>
+            <template v-slot:cell(edit)="data">
+              <router-link :to="`/dashboard/edit/${data.value}`">Edit</router-link>
             </template>
           </b-table>
         </div>
@@ -35,15 +39,12 @@ export default {
       id: null,
       loading: true,
       got_details: false,
+      table_loading: true,
+      all_problems: [],
       user: {
         name: ''
       },
-      fields: ['first_name', 'last_name', 'age'],
-      items: [
-        { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-        { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-        { age: 89, first_name: 'Geneva', last_name: 'Wilson' }
-      ]
+      fields: ['qID', 'name', 'points', 'edit']
     }
   },
   components: {
@@ -61,6 +62,20 @@ export default {
           router.push("/")
         })
     },
+    getAllProblems() {
+      axios.get("/api/dashboard/all-problems")
+        .then((res) => {
+          this.all_problems = res.data;
+          this.all_problems.forEach(function (part, index) {
+            this[index].edit = res.data[index].qID;
+          }, this.all_problems);
+          this.table_loading = false;
+          // console.log(this.all_problems);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
     ...mapActions(["updateUserSession"])
   },
   async mounted() {
@@ -69,6 +84,7 @@ export default {
       this.id = this.$store.state.user._id;
       if (this.id !== null) {
         this.getUserData();
+        this.getAllProblems();
         this.loading = false;
       } else {
         router.push("/");

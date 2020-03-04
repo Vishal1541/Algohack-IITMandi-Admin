@@ -3,17 +3,24 @@
     <div v-if="!loading">
       <Header />
       <center>
-        <h3>Create Problem</h3>
+        <h3>Edit Problem</h3>
       </center>
-      <b-row class="create-problem-container">
+      <b-row class="create-problem-container" v-if="!ques_loading">
         <b-col>
           <div>
+            <!-- <b-form-group id="input-group-1" label="Problem code:" label-for="input-1">
+              <b-form-input id="input-1" v-model="ques.qID" required></b-form-input>
+            </b-form-group>-->
+            <b-row>
+              <b-col sm="3">Problem Code:</b-col>
+              <b-col sm="6">
+                <strong>{{qID}}</strong>
+              </b-col>
+            </b-row>
+            <br />
+
             <b-form-group id="input-group" label="Problem setter name:" label-for="input">
               <b-form-input id="input" v-model="ques.problemSetter" required></b-form-input>
-            </b-form-group>
-
-            <b-form-group id="input-group-1" label="Problem code:" label-for="input-1">
-              <b-form-input id="input-1" v-model="ques.qID" required></b-form-input>
             </b-form-group>
 
             <b-form-group id="input-group-2" label="Problem name:" label-for="input-2">
@@ -28,36 +35,43 @@
 
             <label for="outputFormat">Problem output format:</label>
             <b-form-textarea id="outputFormat" v-model="ques.outputFormat" rows="7" required></b-form-textarea>
+
+            <label for="constraints">Problem constraints:</label>
+            <b-form-textarea id="constraints" v-model="ques.constraints" rows="7" required></b-form-textarea>
+
+            <br />Sample input (.txt):
+            <b-form-textarea id="sample_input" v-model="ques.sampleInput" rows="2" max-rows="8"></b-form-textarea>
+            <br />OR
+            <br />
+            <input type="file" ref="fileSampleInput" @change="selectedFileSampleInput" required />
+
+            <br />
+            <br />Sample output (.txt):
+            <b-form-textarea id="sample_output" v-model="ques.sampleOutput" rows="2" max-rows="8"></b-form-textarea>
+            <br />OR
+            <br />
+            <input type="file" ref="fileSampleOutput" @change="selectedFileSampleOutput" required />
+
+            <br />
+            <br />
+            <b-form-group id="input-group-3" label="Time limit (sec):" label-for="input-3">
+              <b-form-input id="input-3" v-model="ques.timeLimit" required></b-form-input>
+            </b-form-group>
           </div>
         </b-col>
         <b-col>
-          <label for="constraints">Problem constraints:</label>
-          <b-form-textarea id="constraints" v-model="ques.constraints" rows="7" required></b-form-textarea>
-
-          <br />Sample input (.txt):
-          <input
-            type="file"
-            ref="fileSampleInput"
-            @change="selectedFileSampleInput"
-            required
-          />
-
-          <br />Sample output (.txt):
-          <input
-            type="file"
-            ref="fileSampleOutput"
-            @change="selectedFileSampleOutput"
-            required
-          />
-
-          <b-form-group id="input-group-3" label="Time limit (sec):" label-for="input-3">
-            <b-form-input id="input-3" v-model="ques.timeLimit" required></b-form-input>
-          </b-form-group>
-
           <br />
           <strong class="correct-soln">Correct solution</strong> (Compiler: C++ (g++ 7.2.0)
           <strong>upload .cpp file</strong>), will
           <strong>not</strong> be shown in the actual contest problem:
+          <br />
+          <b-form-textarea
+            id="correct_solution"
+            v-model="ques.correctSolution"
+            rows="2"
+            max-rows="15"
+          ></b-form-textarea>
+          <br />OR
           <br />
           <input
             type="file"
@@ -71,6 +85,14 @@
           <strong class="incorrect-soln">Incorrect solution</strong> (Compiler: C++ (g++ 7.2.0)
           <strong>upload .cpp file</strong>), will be given in the actual contest problem:
           <br />
+          <b-form-textarea
+            id="incorrect_solution"
+            v-model="ques.incorrectSolution"
+            rows="2"
+            max-rows="15"
+          ></b-form-textarea>
+          <br />OR
+          <br />
           <input
             type="file"
             ref="fileIncorrectSolution"
@@ -82,6 +104,14 @@
           <br />
           <strong>Checker Program</strong> (Compiler: C++ (g++ 7.2.0)
           <strong>upload .cpp file</strong>), will be used to check the user input file format:
+          <br />
+          <b-form-textarea
+            id="checker_program"
+            v-model="ques.checkerProgram"
+            rows="2"
+            max-rows="15"
+          ></b-form-textarea>
+          <br />OR
           <br />
           <input type="file" ref="fileCheckerProgram" @change="selectedFileCheckerProgram" required />
 
@@ -95,11 +125,10 @@
           </b-form-group>
 
           <center>
-            <span class="btn" @click="createProblem">
+            <span class="btn" @click="editProblem">
               <div v-if="submitted">Please wait...</div>
-              <div v-else>&lt;Create problem /&gt;</div>
+              <div v-else>&lt;Edit problem /&gt;</div>
             </span>
-            <!-- <b-button type="reset" variant="danger" class="btn" @click="reset">Reset</b-button> -->
           </center>
         </b-col>
       </b-row>
@@ -120,13 +149,15 @@ import { mapActions } from "vuex"
 import Header from "../views/Header.vue"
 
 export default {
-  name: "CreateProblem",
+  name: "EditProblem",
+  props: ['qID'],
   data() {
     return {
+      submit_status: '',
+      submitted: false,
       id: null,
       loading: true,
-      submitted: false,
-      submit_status: '',
+      ques_loading: true,
       ques: {
         qID: '',
         name: '',
@@ -136,12 +167,12 @@ export default {
         constraints: '',
         sampleInput: '',
         sampleOutput: '',
-        timeLimit: '1',
+        timeLimit: '',
         correctSolution: '',
         incorrectSolution: '',
         checkerProgram: '',
         hint: '',
-        points: '100',
+        points: '',
         problemSetter: ''
       }
     }
@@ -151,6 +182,20 @@ export default {
   },
   methods: {
     ...mapActions(["updateUserSession"]),
+    async getProblemFromqID() {
+      await axios.get(`/api/dashboard/get-problem/${this.qID}`)
+        .then((res) => {
+          if (res.data == '') {
+            router.push("/");
+          } else {
+            this.ques = res.data;
+            this.ques_loading = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
     async selectedFileSampleInput() {
       let file = this.$refs.fileSampleInput.files[0];
       if (!file || file.type !== 'text/plain') return;
@@ -217,7 +262,7 @@ export default {
         console.error(evt);
       }
     },
-    async createProblem() {
+    async editProblem() {
       if (this.submitted) return;
       this.submit_status = '';
       if (this.ques.qID == '') {
@@ -226,20 +271,14 @@ export default {
         this.ques.timeLimit = parseFloat(this.ques.timeLimit);
         this.ques.points = parseInt(this.ques.points);
         this.submitted = true;
-        await axios.get(`/api/dashboard/qIDexists/${this.ques.qID}`)
-          .then(async (res_exists) => {
-            if (res_exists.data.exists) {
-              this.submit_status = "Problem code already exists. Please enter a new one.";
-            } else {
-              await axios.post('/api/dashboard/create-problem', this.ques)
-                .then((res) => {
-                  // console.log(res);
-                  this.submit_status = res.data.message;
-                })
-                .catch((err) => {
-                  this.submit_status = err;
-                })
-            }
+
+        await axios.post(`/api/dashboard/edit/problem`, this.ques)
+          .then(async () => {
+            this.submit_status = 'Edited successfully!';
+          })
+          .catch((err) => {
+            this.submit_status = 'Could not edit! :(';
+            console.log(err);
           })
         this.submitted = false;
       }
@@ -251,6 +290,7 @@ export default {
       this.id = this.$store.state.user._id;
       if (this.id !== null) {
         this.loading = false;
+        await this.getProblemFromqID();
       } else {
         router.push("/");
       }

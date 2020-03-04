@@ -1,10 +1,10 @@
 <template>
   <div>
     <b-nav>
-      <b-nav-item v-if="id" @click="dashboard">Dashboard</b-nav-item>
+      <b-nav-item v-if="id" @click="dashboard">&lt;Dashboard /&gt;</b-nav-item>
       <!-- <b-nav-item v-if="id" disabled>Dashboard</b-nav-item> -->
-      <b-nav-item v-if="id" @click="createProblem">Create problem</b-nav-item>
-      <b-nav-item v-if="id" @click="logout">Log out</b-nav-item>
+      <b-nav-item v-if="id" @click="createProblem">&lt;Create problem /&gt;</b-nav-item>
+      <b-nav-item v-if="id" @click="logout">&lt;Log out /&gt;</b-nav-item>
       <!-- <b-nav-item disabled>Disabled</b-nav-item> -->
     </b-nav>
   </div>

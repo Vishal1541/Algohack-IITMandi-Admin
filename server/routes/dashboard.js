@@ -11,4 +11,10 @@ router.get('/qIDexists/:qID', dashboard.isProblemCodeAvailable);
 
 router.post('/create-problem', dashboard.createProblem);
 
+router.get('/all-problems', dashboard.getAllProblems);
+
+router.get('/get-problem/:qID', dashboard.getProblemFromqID);
+
+router.post('/edit/problem', dashboard.editProblem);
+
 module.exports = router;

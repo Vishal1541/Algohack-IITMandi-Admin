@@ -8,8 +8,6 @@ exports.homePage = async (req, res, next) => {
 exports.getUser = async (req, res) => {
   adminUser.findOne({ _id: req.session.passport.user })
     .then((user) => {
-      // console.log([user, req.session])
-
       return res.send({ user: user })
     })
     .catch((err) => {
@@ -32,7 +30,6 @@ exports.isProblemCodeAvailable = async (req, res) => {
 }
 
 exports.createProblem = async (req, res) => {
-  console.log("in createProblem");
   problems.findOne({ qID: req.body.qID })
     .then((problem) => {
       if (problem === null) {
@@ -48,8 +45,10 @@ exports.createProblem = async (req, res) => {
           timeLimit: req.body.timeLimit,
           correctSolution: req.body.correctSolution,
           incorrectSolution: req.body.incorrectSolution,
+          checkerProgram: req.body.checkerProgram,
           hint: req.body.hint,
-          points: req.body.points
+          points: req.body.points,
+          problemSetter: req.body.problemSetter
         });
         new_problem.save(function (err) {
           if (err) {
@@ -61,6 +60,37 @@ exports.createProblem = async (req, res) => {
       } else {
         return res.status(401).send({ message: "Problem code already available" });
       }
+    })
+    .catch((err) => {
+      return res.status(500).send(err);
+    })
+}
+
+exports.getAllProblems = async (req, res) => {
+  problems.find({})
+    .then((all_problems) => {
+      return res.status(200).send(all_problems);
+    })
+    .catch((err) => {
+      return res.status(500).send(err);
+    })
+}
+
+exports.getProblemFromqID = async (req, res) => {
+  const qID = req.params.qID;
+  problems.findOne({ qID: qID })
+    .then((problem) => {
+      return res.status(200).send(problem);
+    })
+    .catch((err) => {
+      return res.status(500).send(err);
+    })
+}
+
+exports.editProblem = async (req, res) => {
+  problems.findOneAndUpdate({ qID: req.body.qID }, req.body, { upsert: true })
+    .then((result) => {
+      return res.status(200).send(result);
     })
     .catch((err) => {
       return res.status(500).send(err);

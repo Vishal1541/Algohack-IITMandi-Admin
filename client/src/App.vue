@@ -2,9 +2,9 @@
   <div id="app">
     <div class="content">
       <center>
-        <h1>CodeHack - IIT Mandi</h1>
+        <h1>ALGOHACK - IIT MANDI</h1>
       </center>
-      <hr />
+      <hr class="hr-tag" />
       <b-container>
         <!-- <router-link :to="{ name: 'Dashboard'}">Dashboard</router-link>
         <Login />-->
@@ -13,7 +13,7 @@
       </b-container>
     </div>
     <footer class="footer">
-      <hr />
+      <hr class="hr-tag" />
       <center>&copy; 2020, Vishal Anand</center>
     </footer>
   </div>
@@ -50,6 +50,33 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P|VT323|Share+Tech+Mono|Orbitron|Tomorrow&display=swap');
+
+* {
+  /* font-family: monospace; */
+  font: 13px/1 'Tomorrow', 'monoscape';
+  background: #292929;
+  color: rgb(3, 180, 33);
+  /* font-weight: bold; */
+  /* text-transform: uppercase; */
+}
+:link {
+  color: rgba(214, 166, 33, 0.883);
+}
+:link:visited {
+  color: rgba(214, 166, 33, 0.883);
+}
+:link:hover {
+  color: rgba(54, 207, 195, 0.883);
+  text-decoration: none;
+}
+:link:active {
+  color: rgba(54, 207, 195, 0.883);
+  outline: none;
+}
+.hr-tag {
+  border: 1px solid rgb(3, 180, 33);
+}
 html,
 body {
   height: 96%;
@@ -58,7 +85,8 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
+  /* font-family: Menlo; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */

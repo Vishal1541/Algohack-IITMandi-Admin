@@ -13,8 +13,10 @@ var problems = new mongoose.Schema({
   timeLimit: Double,
   correctSolution: String,
   incorrectSolution: String,
+  checkerProgram: String,
   hint: String,
-  points: Number
+  points: Number,
+  problemSetter: String
 });
 
 module.exports = mongoose.model('Problems', problems);
