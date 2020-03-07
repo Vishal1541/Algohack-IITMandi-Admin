@@ -19,6 +19,9 @@
             <template v-slot:cell(edit)="data">
               <router-link :to="`/dashboard/edit/${data.value}`">Edit</router-link>
             </template>
+            <template v-slot:cell(delete)="data">
+              <div class="dlt-btn" @click="deleteQues(data.value)">Delete</div>
+            </template>
           </b-table>
         </div>
       </b-col>
@@ -44,7 +47,7 @@ export default {
       user: {
         name: ''
       },
-      fields: ['qID', 'name', 'points', 'edit']
+      fields: ['qID', 'name', 'points', 'edit', 'delete']
     }
   },
   components: {
@@ -68,9 +71,31 @@ export default {
           this.all_problems = res.data;
           this.all_problems.forEach(function (part, index) {
             this[index].edit = res.data[index].qID;
+            this[index].delete = res.data[index].qID;
           }, this.all_problems);
           this.table_loading = false;
           // console.log(this.all_problems);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
+    removeByAttr (arr, attr, value) {
+      var i = arr.length;
+      while (i--) {
+        if (arr[i]
+          && (arguments.length > 2 && arr[i][attr] === value)) {
+
+          arr.splice(i, 1);
+
+        }
+      }
+      return arr;
+    },
+    async deleteQues(qID) {
+      await axios.post(`/api/dashboard/delete/${qID}`)
+        .then(() => {
+          this.all_problems = this.removeByAttr(this.all_problems, 'qID', qID);
         })
         .catch((err) => {
           console.log(err);
@@ -96,3 +121,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.dlt-btn {
+  color: rgb(251, 112, 112);
+}
+.dlt-btn:hover {
+  cursor: pointer;
+  color: rgb(251, 112, 112);
+}
+</style>

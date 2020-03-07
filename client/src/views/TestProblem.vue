@@ -27,9 +27,9 @@
           <h4>Sample Output</h4>
           <p class="question-segment">{{ques.sampleOutput}}</p>
         </b-col>
-        <b-col>
+        <b-col cols="7">
           <h4>Code</h4>
-          <canvas id="cv" :height="canvas_height" width="400"></canvas>
+          <canvas id="cv" :height="canvas_height" width="600"></canvas>
           <!-- <p class="code-segment">{{ques.incorrectSolution}}</p> -->
         </b-col>
       </b-row>
@@ -201,14 +201,14 @@ export default {
       const cv = document.getElementById('cv')
       const ctx = cv.getContext('2d')
       ctx.clearRect(0, 0, 400, 300)
-      ctx.font = 14 + 'px' + ' ' + 'Arial'
+      ctx.font = 12 + 'px' + ' ' + 'Courier New'
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = 'left'
       ctx.save()
       // ctx.translate(400 / 2, 300 / 2)
       var line = '';
-      var maxWidth = 400;
-      var x = 0, y = 0;
+      var maxWidth = 600;
+      var x = 0, y = 25;
       var lineHeight = 25;
       var lines = this.ques.incorrectSolution.split('\n');
       for (var i = 0; i < lines.length; i++) {

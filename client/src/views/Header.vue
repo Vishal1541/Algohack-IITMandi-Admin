@@ -4,6 +4,7 @@
       <b-nav-item v-if="id" @click="dashboard">&lt;Dashboard /&gt;</b-nav-item>
       <!-- <b-nav-item v-if="id" disabled>Dashboard</b-nav-item> -->
       <b-nav-item v-if="id" @click="createProblem">&lt;Create problem /&gt;</b-nav-item>
+      <b-nav-item v-if="id" @click="contestSetting">&lt;Contest Setting /&gt;</b-nav-item>
       <b-nav-item v-if="id" @click="logout">&lt;Log out /&gt;</b-nav-item>
       <!-- <b-nav-item disabled>Disabled</b-nav-item> -->
     </b-nav>
@@ -38,6 +39,9 @@ export default {
     },
     createProblem() {
       router.push("/dashboard/create-problem");
+    },
+    contestSetting() {
+      router.push("/dashboard/contest");
     }
   },
   async mounted() {

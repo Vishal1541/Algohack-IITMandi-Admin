@@ -1,5 +1,6 @@
 var adminUser = require('../models/admin_user');
 var problems = require('../models/problems');
+var contest = require('../models/contest');
 
 exports.homePage = async (req, res, next) => {
   return res.send(req.session.passport.user);
@@ -91,6 +92,43 @@ exports.editProblem = async (req, res) => {
   problems.findOneAndUpdate({ qID: req.body.qID }, req.body, { upsert: true })
     .then((result) => {
       return res.status(200).send(result);
+    })
+    .catch((err) => {
+      return res.status(500).send(err);
+    })
+}
+
+exports.deleteProblem = async (req, res) => {
+  problems.findOneAndDelete({ qID: req.params.qID })
+    .then((result) => {
+      return res.status(200).send(result);
+    })
+    .catch((err) => {
+      return res.status(500).send(err);
+    })
+}
+
+exports.editContestSetting = async (req, res) => {
+  const edited_contest = new contest(req.body);
+  contest.remove({})
+    .then(() => {
+      edited_contest.save(function (err) {
+        if (err) {
+          return res.status(500).send(err);
+        } else {
+          return res.status(200).send({ message: "Contest settings edited" });
+        }
+      });
+    })
+    .catch((err) => {
+      return res.status(500).send(err);
+    })
+}
+
+exports.getContestSetting = async (req, res) => {
+  contest.findOne({})
+    .then((setting) => {
+      return res.status(200).send(setting);
     })
     .catch((err) => {
       return res.status(500).send(err);

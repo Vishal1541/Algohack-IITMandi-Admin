@@ -5,6 +5,7 @@ import Dashboard from "@/views/Dashboard.vue"
 import CreateProblem from "@/views/CreateProblem.vue"
 import EditProblem from "@/views/EditProblem.vue"
 import TestProblem from "@/views/TestProblem.vue"
+import Contest from "@/views/Contest.vue"
 
 Vue.use(Router);
 
@@ -23,6 +24,11 @@ const routes = [
     path: "/dashboard/create-problem",
     name: "CreateProblem",
     component: CreateProblem
+  },
+  {
+    path: "/dashboard/contest",
+    name: "Contest",
+    component: Contest
   },
   {
     path: "/dashboard/edit/:qID",

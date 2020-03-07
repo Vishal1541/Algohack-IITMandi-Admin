@@ -17,4 +17,10 @@ router.get('/get-problem/:qID', dashboard.getProblemFromqID);
 
 router.post('/edit/problem', dashboard.editProblem);
 
+router.post('/delete/:qID', dashboard.deleteProblem);
+
+router.post('/edit/contest-setting', dashboard.editContestSetting);
+
+router.get('/get/contest-setting', dashboard.getContestSetting);
+
 module.exports = router;
