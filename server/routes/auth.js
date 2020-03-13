@@ -8,4 +8,6 @@ router.post('/login', auth.postLogin);
 
 router.post('/logout', auth.postLogout);
 
+router.post('/judge0-sumbit', auth.makeSubmissionJudge0);
+
 module.exports = router;

@@ -122,7 +122,7 @@ export default {
         language_id: "10",
         stdin: this.inputFile
       };
-      await axios.post('http://sntc.iitmandi.ac.in:3000/submissions/?base64_encoded=false&wait=true', check_format_body)
+      await axios.post('/api/auth/judge0-sumbit', check_format_body)
         .then((res) => {
           const status = res.data.stderr;
           if (status === 'SUCCESS\n') {
@@ -152,7 +152,7 @@ export default {
         language_id: "10",
         stdin: this.inputFile
       };
-      await axios.post('http://sntc.iitmandi.ac.in:3000/submissions/?base64_encoded=false&wait=true', correct_solution)
+      await axios.post('/api/auth/judge0-sumbit', correct_solution)
         .then((res) => {
           // console.log("Correct: ", res.data.stdout);
           correct_stdout = res.data.stdout;
@@ -160,7 +160,7 @@ export default {
         .catch((err) => {
           console.log(err);
         })
-      await axios.post('http://sntc.iitmandi.ac.in:3000/submissions/?base64_encoded=false&wait=true', incorrect_solution)
+      await axios.post('/api/auth/judge0-sumbit', incorrect_solution)
         .then((res) => {
           // console.log("Incorrect: ", res.data.stdout);
           incorrect_stdout = res.data.stdout;

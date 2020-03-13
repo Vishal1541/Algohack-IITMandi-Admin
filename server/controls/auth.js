@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 var adminUser = require('../models/admin_user');
 const passport = require('passport');
+const axios = require('axios');
 
 exports.postSignUp = async (req, res, next) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -74,4 +75,14 @@ exports.postLogin = async (req, res, next) => {
 exports.postLogout = async (req, res, next) => {
   req.logout();
   return res.send('Logged out');
+}
+
+exports.makeSubmissionJudge0 = async (req, res, next) => {
+  await axios.post('http://sntc.iitmandi.ac.in:3000/submissions/?base64_encoded=false&wait=true', req.body)
+    .then((response) => {
+      return res.send(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 }
