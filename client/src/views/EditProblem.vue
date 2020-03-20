@@ -60,6 +60,10 @@
           </div>
         </b-col>
         <b-col>
+          <b-form-group label="Solution compiler:">
+            <b-form-radio v-model="ques.languageCode" name="lang-code" value="10">C++ (g++ 7.2.0)</b-form-radio>
+            <b-form-radio v-model="ques.languageCode" name="lang-code" value="36">Python (2.7.9)</b-form-radio>
+          </b-form-group>
           <br />
           <strong class="correct-soln">Correct solution</strong> (Compiler: C++ (g++ 7.2.0)
           <strong>upload .cpp file</strong>), will
@@ -134,7 +138,9 @@
       </b-row>
       <div class="submit-status">
         <center>
-          <strong><h3>{{submit_status}}</h3></strong>
+          <strong>
+            <h3>{{submit_status}}</h3>
+          </strong>
         </center>
       </div>
     </div>
@@ -270,6 +276,11 @@ export default {
       } else {
         this.ques.timeLimit = parseFloat(this.ques.timeLimit);
         this.ques.points = parseInt(this.ques.points);
+        this.ques.languageCode = parseInt(this.ques.languageCode);
+        if (this.ques.languageCode === 36)
+          this.ques.language = 'Python (2.7.9)';
+        else if (this.ques.languageCode === 10)
+          this.ques.language = 'C++ (g++ 7.2.0)';
         this.submitted = true;
 
         await axios.post(`/api/dashboard/edit/problem`, this.ques)

@@ -119,7 +119,7 @@ export default {
     async checkInputFormat(callback) {
       const check_format_body = {
         source_code: this.ques.checkerProgram,
-        language_id: this.ques.languageCode,
+        language_id: "10",
         stdin: this.inputFile
       };
       await axios.post('/api/auth/judge0-sumbit', check_format_body)
@@ -154,7 +154,7 @@ export default {
       };
       await axios.post('/api/auth/judge0-sumbit', correct_solution)
         .then((res) => {
-          // console.log("Correct: ", res.data.stdout);
+          console.log("Correct: ", res.data.stdout);
           correct_stdout = res.data.stdout;
         })
         .catch((err) => {
@@ -162,7 +162,7 @@ export default {
         })
       await axios.post('/api/auth/judge0-sumbit', incorrect_solution)
         .then((res) => {
-          // console.log("Incorrect: ", res.data.stdout);
+          console.log("Incorrect: ", res.data.stdout);
           incorrect_stdout = res.data.stdout;
         })
         .catch((err) => {

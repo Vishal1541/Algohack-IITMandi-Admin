@@ -56,11 +56,11 @@
 
           <b-form-group label="Solution compiler:">
             <b-form-radio v-model="ques.languageCode" name="lang-code" value="10">C++ (g++ 7.2.0)</b-form-radio>
-            <b-form-radio v-model="ques.languageCode" name="lang-code" value="34">Python (3.6.0)</b-form-radio>
+            <b-form-radio v-model="ques.languageCode" name="lang-code" value="36">Python (2.7.9)</b-form-radio>
           </b-form-group>
           <br />
           <strong class="correct-soln">Correct solution</strong>
-          <b>({{ques.languageCode == "10" ? "C++ (g++ 7.2.0) upload .cpp file" : (ques.languageCode == "34" ? "Python (3.6.0) upload .py file": "")}})</b>
+          <b>({{ques.languageCode == "10" ? "C++ (g++ 7.2.0) upload .cpp file" : (ques.languageCode == "36" ? "Python (2.7.9) upload .py file": "")}})</b>
           , will
           <strong>not</strong> be shown in the actual contest problem:
           <br />
@@ -74,7 +74,7 @@
           <br />
           <br />
           <strong class="incorrect-soln">Incorrect solution</strong>
-          <b>({{ques.languageCode == "10" ? "C++ (g++ 7.2.0) upload .cpp file" : (ques.languageCode == "34" ? "Python (3.6.0) upload .py file": "")}})</b>
+          <b>({{ques.languageCode == "10" ? "C++ (g++ 7.2.0) upload .cpp file" : (ques.languageCode == "36" ? "Python (2.7.9) upload .py file": "")}})</b>
           , will be given in the actual contest problem:
           <br />
           <input
@@ -236,8 +236,8 @@ export default {
         this.ques.timeLimit = parseFloat(this.ques.timeLimit);
         this.ques.points = parseInt(this.ques.points);
         this.ques.languageCode = parseInt(this.ques.languageCode);
-        if (this.ques.languageCode === 34)
-          this.ques.language = 'Python (3.6.0)';
+        if (this.ques.languageCode === 36)
+          this.ques.language = 'Python (2.7.9)';
         else if (this.ques.languageCode === 10)
           this.ques.language = 'C++ (g++ 7.2.0)';
         this.submitted = true;
