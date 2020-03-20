@@ -11,6 +11,8 @@ var problems = new mongoose.Schema({
   sampleInput: String,
   sampleOutput: String,
   timeLimit: Double,
+  languageCode: Number,
+  language: String,
   correctSolution: String,
   incorrectSolution: String,
   checkerProgram: String,

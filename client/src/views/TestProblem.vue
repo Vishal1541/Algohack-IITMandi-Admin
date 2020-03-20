@@ -15,17 +15,17 @@
       <b-row>
         <b-col>
           <h4>Problem Statement</h4>
-          <p class="question-segment">{{ques.description}}</p>
+          <p class="question-segment" v-html="ques.description"></p>
           <h4>Input Format</h4>
-          <p class="question-segment">{{ques.inputFormat}}</p>
+          <p class="question-segment" v-html="ques.inputFormat"></p>
           <h4>Output Format</h4>
-          <p class="question-segment">{{ques.outputFormat}}</p>
+          <p class="question-segment" v-html="ques.outputFormat"></p>
           <h4>Constraints</h4>
-          <p class="question-segment">{{ques.constraints}}</p>
+          <p class="question-segment" v-html="ques.constraints"></p>
           <h4>Sample Input</h4>
-          <p class="question-segment">{{ques.sampleInput}}</p>
+          <p class="question-segment" v-html="ques.sampleInput"></p>
           <h4>Sample Output</h4>
-          <p class="question-segment">{{ques.sampleOutput}}</p>
+          <p class="question-segment" v-html="ques.sampleOutput"></p>
         </b-col>
         <b-col cols="7">
           <h4>Code</h4>
@@ -119,7 +119,7 @@ export default {
     async checkInputFormat(callback) {
       const check_format_body = {
         source_code: this.ques.checkerProgram,
-        language_id: "10",
+        language_id: this.ques.languageCode,
         stdin: this.inputFile
       };
       await axios.post('/api/auth/judge0-sumbit', check_format_body)
@@ -144,12 +144,12 @@ export default {
       var correct_stdout = '', incorrect_stdout = '';
       const correct_solution = {
         source_code: this.ques.correctSolution,
-        language_id: "10",
+        language_id: this.ques.languageCode,
         stdin: this.inputFile
       };
       const incorrect_solution = {
         source_code: this.ques.incorrectSolution,
-        language_id: "10",
+        language_id: this.ques.languageCode,
         stdin: this.inputFile
       };
       await axios.post('/api/auth/judge0-sumbit', correct_solution)

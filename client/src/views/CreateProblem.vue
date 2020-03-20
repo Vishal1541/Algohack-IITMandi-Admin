@@ -54,9 +54,14 @@
             <b-form-input id="input-3" v-model="ques.timeLimit" required></b-form-input>
           </b-form-group>
 
+          <b-form-group label="Solution compiler:">
+            <b-form-radio v-model="ques.languageCode" name="lang-code" value="10">C++ (g++ 7.2.0)</b-form-radio>
+            <b-form-radio v-model="ques.languageCode" name="lang-code" value="34">Python (3.6.0)</b-form-radio>
+          </b-form-group>
           <br />
-          <strong class="correct-soln">Correct solution</strong> (Compiler: C++ (g++ 7.2.0)
-          <strong>upload .cpp file</strong>), will
+          <strong class="correct-soln">Correct solution</strong>
+          <b>({{ques.languageCode == "10" ? "C++ (g++ 7.2.0) upload .cpp file" : (ques.languageCode == "34" ? "Python (3.6.0) upload .py file": "")}})</b>
+          , will
           <strong>not</strong> be shown in the actual contest problem:
           <br />
           <input
@@ -68,8 +73,9 @@
 
           <br />
           <br />
-          <strong class="incorrect-soln">Incorrect solution</strong> (Compiler: C++ (g++ 7.2.0)
-          <strong>upload .cpp file</strong>), will be given in the actual contest problem:
+          <strong class="incorrect-soln">Incorrect solution</strong>
+          <b>({{ques.languageCode == "10" ? "C++ (g++ 7.2.0) upload .cpp file" : (ques.languageCode == "34" ? "Python (3.6.0) upload .py file": "")}})</b>
+          , will be given in the actual contest problem:
           <br />
           <input
             type="file"
@@ -105,7 +111,9 @@
       </b-row>
       <div class="submit-status">
         <center>
-          <strong><h3>{{submit_status}}</h3></strong>
+          <strong>
+            <h3>{{submit_status}}</h3>
+          </strong>
         </center>
       </div>
     </div>
@@ -137,6 +145,8 @@ export default {
         sampleInput: '',
         sampleOutput: '',
         timeLimit: '1',
+        languageCode: '',
+        language: '',
         correctSolution: '',
         incorrectSolution: '',
         checkerProgram: '',
@@ -225,6 +235,11 @@ export default {
       } else {
         this.ques.timeLimit = parseFloat(this.ques.timeLimit);
         this.ques.points = parseInt(this.ques.points);
+        this.ques.languageCode = parseInt(this.ques.languageCode);
+        if (this.ques.languageCode === 34)
+          this.ques.language = 'Python (3.6.0)';
+        else if (this.ques.languageCode === 10)
+          this.ques.language = 'C++ (g++ 7.2.0)';
         this.submitted = true;
         await axios.get(`/api/dashboard/qIDexists/${this.ques.qID}`)
           .then(async (res_exists) => {

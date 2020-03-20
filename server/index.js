@@ -39,6 +39,13 @@ app.use(passport.initialize());
 
 app.use(passport.session());
 
+if (process.env.NODE_ENV !== 'production') {
+  delete process.env['http_proxy'];
+  delete process.env['HTTP_PROXY'];
+  delete process.env['https_proxy'];
+  delete process.env['HTTPS_PROXY'];
+}
+
 passport.use(
   new LocalStrategy(
     {

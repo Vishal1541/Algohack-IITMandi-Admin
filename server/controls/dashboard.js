@@ -34,23 +34,7 @@ exports.createProblem = async (req, res) => {
   problems.findOne({ qID: req.body.qID })
     .then((problem) => {
       if (problem === null) {
-        const new_problem = new problems({
-          qID: req.body.qID,
-          name: req.body.name,
-          description: req.body.description,
-          inputFormat: req.body.inputFormat,
-          outputFormat: req.body.outputFormat,
-          constraints: req.body.constraints,
-          sampleInput: req.body.sampleInput,
-          sampleOutput: req.body.sampleOutput,
-          timeLimit: req.body.timeLimit,
-          correctSolution: req.body.correctSolution,
-          incorrectSolution: req.body.incorrectSolution,
-          checkerProgram: req.body.checkerProgram,
-          hint: req.body.hint,
-          points: req.body.points,
-          problemSetter: req.body.problemSetter
-        });
+        const new_problem = new problems(req.body);
         new_problem.save(function (err) {
           if (err) {
             return res.status(500).send({ message: err });
