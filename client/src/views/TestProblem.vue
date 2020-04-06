@@ -125,6 +125,8 @@ export default {
       await axios.post('/api/auth/judge0-sumbit', check_format_body)
         .then((res) => {
           const status = res.data.stderr;
+          console.log("ip file: ", check_format_body.stdin);
+          console.log("ip format status: ", status);
           if (status === 'SUCCESS\n') {
             // this.submit_status = 'Correct input format.'
             this.submit_status_code = 200;

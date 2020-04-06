@@ -78,6 +78,7 @@ exports.postLogout = async (req, res, next) => {
 }
 
 exports.makeSubmissionJudge0 = async (req, res, next) => {
+  req.body.stdin = req.body.stdin.replace(/\r\n/g, "\n");
   await axios.post('http://sntc.iitmandi.ac.in:3000/submissions/?base64_encoded=false&wait=true', req.body)
     .then((response) => {
       return res.send(response.data);
