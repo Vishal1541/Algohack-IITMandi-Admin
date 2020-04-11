@@ -21,4 +21,4 @@ var problems = new mongoose.Schema({
   problemSetter: String
 });
 
-module.exports = mongoose.model('Problems2', problems);
+module.exports = mongoose.model('Problems', problems);
