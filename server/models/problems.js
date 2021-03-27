@@ -18,7 +18,8 @@ var problems = new mongoose.Schema({
   checkerProgram: String,
   hint: String,
   points: Number,
-  problemSetter: String
+  problemSetter: String,
+  isPresentInContest: Boolean
 });
 
 module.exports = mongoose.model('Problems', problems);

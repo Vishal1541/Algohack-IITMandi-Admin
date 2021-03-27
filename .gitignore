@@ -1,4 +1,5 @@
-# /server/config
+/server/config
 /server/login_cred.txt
 /node_modules
+/client/node_modules
 /ques

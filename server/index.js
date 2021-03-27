@@ -6,7 +6,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 
-var adminUser = require('./models/admin_user');
+var users = require('./models/users');
+var problems = require('./models/problems');
 const configDb = require('./config/database');
 const authRoute = require('./routes/auth');
 const dashboardRoute = require('./routes/dashboard');
@@ -54,7 +55,7 @@ passport.use(
     },
 
     (username, password, done) => {
-      adminUser.findOne({ username: username })
+      users.findOne({ username: username })
         .then((user) => {
           if (user === null) {
             done(null, false, { message: 'Incorrect username or password' });
@@ -64,6 +65,8 @@ passport.use(
                 done(null, false, { message: err });
               } else if (!match) {
                 done(null, false, { message: 'Incorrect username or password' });
+              } else if (!user.isAdmin) {
+                done(null, false, { message: 'You are not the admin' });
               } else {
                 done(null, user);
               }
@@ -82,7 +85,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  adminUser.findOne({ _id: id })
+  users.findOne({ _id: id })
     .then((user) => {
       done(null, user);
     })

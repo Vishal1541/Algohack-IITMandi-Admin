@@ -1,4 +1,4 @@
-var adminUser = require('../models/admin_user');
+var users = require('../models/users');
 var problems = require('../models/problems');
 var contest = require('../models/contest');
 
@@ -7,7 +7,7 @@ exports.homePage = async (req, res, next) => {
 }
 
 exports.getUser = async (req, res) => {
-  adminUser.findOne({ _id: req.session.passport.user })
+  await users.findOne({ _id: req.session.passport.user })
     .then((user) => {
       return res.send({ user: user })
     })
@@ -17,7 +17,7 @@ exports.getUser = async (req, res) => {
 }
 
 exports.isProblemCodeAvailable = async (req, res) => {
-  problems.findOne({ qID: req.params.qID })
+  await problems.findOne({ qID: req.params.qID })
     .then((problem) => {
       if (problem === null) {
         return res.send({ exists: false });
@@ -31,10 +31,11 @@ exports.isProblemCodeAvailable = async (req, res) => {
 }
 
 exports.createProblem = async (req, res) => {
-  problems.findOne({ qID: req.body.qID })
+  await problems.findOne({ qID: req.body.qID })
     .then((problem) => {
       if (problem === null) {
-        const new_problem = new problems(req.body);
+        var new_problem = new problems(req.body);
+        new_problem.isPresentInContest = false;
         new_problem.save(function (err) {
           if (err) {
             return res.status(500).send({ message: err });
@@ -52,7 +53,7 @@ exports.createProblem = async (req, res) => {
 }
 
 exports.getAllProblems = async (req, res) => {
-  problems.find({})
+  await problems.find({})
     .then((all_problems) => {
       return res.status(200).send(all_problems);
     })
@@ -63,7 +64,7 @@ exports.getAllProblems = async (req, res) => {
 
 exports.getProblemFromqID = async (req, res) => {
   const qID = req.params.qID;
-  problems.findOne({ qID: qID })
+  await problems.findOne({ qID: qID })
     .then((problem) => {
       return res.status(200).send(problem);
     })
@@ -73,7 +74,7 @@ exports.getProblemFromqID = async (req, res) => {
 }
 
 exports.editProblem = async (req, res) => {
-  problems.findOneAndUpdate({ qID: req.body.qID }, req.body, { upsert: true })
+  await problems.findOneAndUpdate({ qID: req.body.qID }, req.body, { upsert: true })
     .then((result) => {
       return res.status(200).send(result);
     })
@@ -83,7 +84,7 @@ exports.editProblem = async (req, res) => {
 }
 
 exports.deleteProblem = async (req, res) => {
-  problems.findOneAndDelete({ qID: req.params.qID })
+  await problems.findOneAndDelete({ qID: req.params.qID })
     .then((result) => {
       return res.status(200).send(result);
     })
@@ -94,15 +95,12 @@ exports.deleteProblem = async (req, res) => {
 
 exports.editContestSetting = async (req, res) => {
   const edited_contest = new contest(req.body);
-  contest.remove({})
-    .then(() => {
-      edited_contest.save(function (err) {
-        if (err) {
-          return res.status(500).send(err);
-        } else {
-          return res.status(200).send({ message: "Contest settings edited" });
-        }
-      });
+  await contest.findOne({})
+    .then(async (setting) => {
+      await contest.findOneAndUpdate({ _id: setting._id }, edited_contest)
+        .then(() => {
+          return res.status(200).send();
+        })
     })
     .catch((err) => {
       return res.status(500).send(err);
@@ -110,11 +108,51 @@ exports.editContestSetting = async (req, res) => {
 }
 
 exports.getContestSetting = async (req, res) => {
-  contest.findOne({})
+  await contest.findOne({})
     .then((setting) => {
       return res.status(200).send(setting);
     })
     .catch((err) => {
       return res.status(500).send(err);
+    })
+}
+
+exports.getProblemsMetadata = async (req, res) => {
+  var problemsMetadata = [];
+  await problems.find({})
+    .then((allProblems) => {
+      allProblems.forEach(problem => {
+        problemsMetadata.push({
+          qID: problem.qID,
+          isPresentInContest: problem.isPresentInContest
+        })
+      });
+      return res.status(200).send(problemsMetadata);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+}
+
+exports.editProblemsVisibility = async (req, res) => {
+  const problemsShouldPresentInContest = req.body;
+  await problems.find({})
+    .then(async (allProblems) => {
+      allProblems.forEach(async problem => {
+        // This `problem` should be present in the contest.
+        if (!problem.isPresentInContest && problemsShouldPresentInContest.indexOf(problem.qID) != -1) {
+          problem.isPresentInContest = true;
+          await problems.findOneAndUpdate({ qID: problem.qID }, problem);
+        }
+        // This `problem` should NOT be present in the contest.
+        else if (problem.isPresentInContest && problemsShouldPresentInContest.indexOf(problem.qID) == -1) {
+          problem.isPresentInContest = false;
+          await problems.findOneAndUpdate({ qID: problem.qID }, problem);
+        }
+      });
+      return res.status(200).send();
+    })
+    .catch((err) => {
+      console.log(err);
     })
 }

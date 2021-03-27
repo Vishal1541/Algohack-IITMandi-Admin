@@ -23,4 +23,8 @@ router.post('/edit/contest-setting', dashboard.editContestSetting);
 
 router.get('/get/contest-setting', dashboard.getContestSetting);
 
+router.get('/get/problems-metadata', dashboard.getProblemsMetadata);
+
+router.post('/edit/problems-visibility', dashboard.editProblemsVisibility);
+
 module.exports = router;

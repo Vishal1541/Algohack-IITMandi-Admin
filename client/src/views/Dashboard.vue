@@ -19,9 +19,9 @@
             <template v-slot:cell(edit)="data">
               <router-link :to="`/dashboard/edit/${data.value}`">Edit</router-link>
             </template>
-            <template v-slot:cell(delete)="data">
+            <!-- <template v-slot:cell(delete)="data">
               <div class="dlt-btn" @click="deleteQues(data.value)">Delete</div>
-            </template>
+            </template> -->
           </b-table>
         </div>
       </b-col>
@@ -47,7 +47,7 @@ export default {
       user: {
         name: ''
       },
-      fields: ['qID', 'name', 'points', 'edit', 'delete']
+      fields: ['qID', 'name', 'points', 'isPresentInContest', 'edit']
     }
   },
   components: {
@@ -71,10 +71,11 @@ export default {
           this.all_problems = res.data;
           this.all_problems.forEach(function (part, index) {
             this[index].edit = res.data[index].qID;
-            this[index].delete = res.data[index].qID;
+            // this[index].delete = res.data[index].qID;
+            this[index].isPresentInContest = (res.data[index].isPresentInContest ? "Yes" : "No");
           }, this.all_problems);
           this.table_loading = false;
-          // console.log(this.all_problems);
+          console.log(this.all_problems);
         })
         .catch((err) => {
           console.log(err);
