@@ -14,7 +14,7 @@
     </div>
     <footer class="footer">
       <hr class="hr-tag" />
-      <center>&copy; 2020, Vishal Anand</center>
+      <center>&copy; 2021, Vishal Anand</center>
     </footer>
   </div>
 </template>
